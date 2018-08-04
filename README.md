@@ -6,6 +6,8 @@
 
 Run index.html in a browser
 
+Try it - [WordBeater Game](https://bradtraversy.github.io/wordbeater)
+
 ## App Info
 
 ### Author
