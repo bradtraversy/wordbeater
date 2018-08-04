@@ -1,0 +1,15 @@
+{
+  "name": "wordbeater",
+  "version": "1.0.0",
+  "description": "Speed typing game written in vanilla JS",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "gh-pages -d dist"
+  },
+  "author": "Brad Traversy",
+  "license": "MIT",
+  "homepage": "https://bradtraversy.github.io/wordbeater",
+  "dependencies": {
+    "gh-pages": "^1.2.0"
+  }
+}
