@@ -1,5 +1,30 @@
 window.addEventListener('load', init);
 
+//Load More Words
+function load_more_words()
+{
+	var xmlhttp;
+	if (window.XMLHttpRequest)
+	{
+		//  IE7+, Firefox, Chrome, Opera, Safari 
+		xmlhttp=new XMLHttpRequest();
+	}
+	else
+	{
+		// IE6, IE5 
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange=function()
+	{
+		if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+			words=xmlhttp.responseText.split("\n");
+		}
+	}
+	xmlhttp.open("GET","words.txt",true);
+	xmlhttp.send();
+}
+
 // Globals
 
 // Available Levels
@@ -24,7 +49,7 @@ const timeDisplay = document.querySelector('#time');
 const message = document.querySelector('#message');
 const seconds = document.querySelector('#seconds');
 
-const words = [
+var words = [
   'hat',
   'river',
   'lucky',
@@ -64,6 +89,8 @@ function init() {
   setInterval(countdown, 1000);
   // Check game status
   setInterval(checkStatus, 50);
+  // Fetch more words
+  setTimeout(load_more_words(),1000)
 }
 
 // Start match
