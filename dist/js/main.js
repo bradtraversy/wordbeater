@@ -23,6 +23,7 @@ const scoreDisplay = document.querySelector('#score');
 const timeDisplay = document.querySelector('#time');
 const message = document.querySelector('#message');
 const seconds = document.querySelector('#seconds');
+const highscoreDisplay = document.querySelector('#highscore');
 
 const words = [
   'hat',
@@ -74,6 +75,18 @@ function startMatch() {
     showWord(words);
     wordInput.value = '';
     score++;
+  }
+  
+  // Highscore based on score value for Session Storage
+  if (typeof sessionStorage['highscore'] === 'undefined' || score > sessionStorage['highscore']) {
+    sessionStorage['highscore'] = score;
+  } else {
+    sessionStorage['highscore'] = sessionStorage['highscore'];
+  }
+
+  // Prevent display of High Score: -1
+  if (sessionStorage['highscore'] >= 0) {
+  highscoreDisplay.innerHTML = sessionStorage['highscore'];
   }
 
   // If score is -1, display 0
