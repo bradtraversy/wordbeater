@@ -50,7 +50,10 @@ const words = [
   'magic',
   'master',
   'space',
-  'definition'
+  'definition',
+  'champion',
+  'ghost',
+  'fierce'
 ];
 
 // Initialize Game
