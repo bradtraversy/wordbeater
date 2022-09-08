@@ -10,6 +10,6 @@
   "license": "MIT",
   "homepage": "https://bradtraversy.github.io/wordbeater",
   "dependencies": {
-    "gh-pages": "^1.2.0"
+    "gh-pages": "^4.0.0"
   }
 }
