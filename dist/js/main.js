@@ -18,7 +18,11 @@ function load_more_words()
 	{
 		if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
-			words=xmlhttp.responseText.split("\n");
+      if (navigator.userAgentData.platform === "Windows")
+			  words=xmlhttp.responseText.split("\r\n");
+      else
+        words=xmlhttp.responseText.split("\n");
+
 		}
 	}
 	xmlhttp.open("GET","words.txt",true);
