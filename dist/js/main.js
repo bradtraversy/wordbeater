@@ -1,41 +1,55 @@
 window.addEventListener('load', init);
 
-//Load More Words
-function load_more_words()
-{
-	var xmlhttp;
-	if (window.XMLHttpRequest)
-	{
-		//  IE7+, Firefox, Chrome, Opera, Safari 
-		xmlhttp=new XMLHttpRequest();
-	}
-	else
-	{
-		// IE6, IE5 
-		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	xmlhttp.onreadystatechange=function()
-	{
-		if (xmlhttp.readyState==4 && xmlhttp.status==200)
-		{
-			words=xmlhttp.responseText.split("\n");
-		}
-	}
-	xmlhttp.open("GET","words.txt",true);
-	xmlhttp.send();
-}
+var words = [];
 
-// Globals
+//Load words
+async function load_words()
+{
+  return new Promise(resolve => {
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {
+      //  IE7+, Firefox, Chrome, Opera, Safari 
+      xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {
+      // IE6, IE5 
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        
+        if (navigator.userAgentData.platform === "Windows")
+          words=xmlhttp.responseText.split("\r\n");
+        else
+          words=xmlhttp.responseText.split("\n");
+
+        words = words.map(string => {
+          const parts = string.split(" - ");
+          return { acronym: parts[0], terms: parts[1] };
+        });
+        
+        resolve('resolved');
+      }
+    }
+    xmlhttp.open("GET","words.txt",true);
+    xmlhttp.send();
+  });
+}
 
 // Available Levels
 const levels = {
+  supereasy: 10,
   easy: 5,
   medium: 3,
   hard: 1
 };
 
 // To change level
-const currentLevel = levels.medium;
+const currentLevel = levels.supereasy;
 
 let time = currentLevel;
 let score = 0;
@@ -50,39 +64,9 @@ const message = document.querySelector('#message');
 const seconds = document.querySelector('#seconds');
 const highscoreDisplay = document.querySelector('#highscore');
 
-var words = [
-  'hat',
-  'river',
-  'lucky',
-  'statue',
-  'generate',
-  'stubborn',
-  'cocktail',
-  'runaway',
-  'joke',
-  'developer',
-  'establishment',
-  'hero',
-  'javascript',
-  'nutrition',
-  'revolver',
-  'echo',
-  'siblings',
-  'investigate',
-  'horrendous',
-  'symptom',
-  'laughter',
-  'magic',
-  'master',
-  'space',
-  'definition',
-  'champion',
-  'ghost',
-  'fierce'
-];
-
 // Initialize Game
-function init() {
+async function init() {
+  let result = await load_words();
   // Show number of seconds in UI
   seconds.innerHTML = currentLevel;
   // Load word from array
@@ -93,8 +77,7 @@ function init() {
   setInterval(countdown, 1000);
   // Check game status
   setInterval(checkStatus, 50);
-  // Fetch more words
-  setTimeout(load_more_words(),1000)
+
 }
 
 // Start match
@@ -129,7 +112,10 @@ function startMatch() {
 
 // Match currentWord to wordInput
 function matchWords() {
-  if (wordInput.value === currentWord.innerHTML) {
+  
+  let find = words.find(o => o.acronym === currentWord.innerHTML);
+
+  if (wordInput.value === find.terms) {
     message.innerHTML = 'Correct!!!';
     return true;
   } else {
@@ -143,7 +129,7 @@ function showWord(words) {
   // Generate random array index
   const randIndex = Math.floor(Math.random() * words.length);
   // Output random word
-  currentWord.innerHTML = words[randIndex];
+  currentWord.innerHTML = words[randIndex].acronym;
 }
 
 // Countdown timer
@@ -162,8 +148,9 @@ function countdown() {
 
 // Check game status
 function checkStatus() {
+  let find = words.find(o => o.acronym === currentWord.innerHTML);
   if (!isPlaying && time === 0) {
-    message.innerHTML = 'Game Over!!!';
+    message.innerHTML = 'Game Over!!! ' + find.terms;
     score = -1;
   }
 }
