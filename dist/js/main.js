@@ -1,4 +1,6 @@
 window.addEventListener('load', init);
+var input = document.getElementById("word-input");
+var restartbtn = document.getElementById("btn");
 
 var words = [];
 
@@ -77,7 +79,16 @@ async function init() {
   setInterval(countdown, 1000);
   // Check game status
   setInterval(checkStatus, 50);
+}
 
+restartbtn.onclick = async function init() {
+  input.classList.remove('hidden')
+  restartbtn.classList.add('hidden')
+  isPlaying = true;
+  time = 10
+  showWord(words);
+  message.innerHTML = ''
+  wordInput.value = ''
 }
 
 // Start match
@@ -152,5 +163,7 @@ function checkStatus() {
   if (!isPlaying && time === 0) {
     message.innerHTML = 'Game Over!!! ' + find.terms;
     score = -1;
+    input.classList.add('hidden')
+    restartbtn.classList.remove('hidden')
   }
 }
